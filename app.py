@@ -3,10 +3,11 @@ import qrcode
 from io import BytesIO
 from PIL import Image
 
-# Imerys Brand Colors (Adapt to official Imerys chart)
-IMERYS_BLUE = "#004685"  # Primary Blue
-IMERYS_LIGHT_BLUE = "#6699CC" # Example Light Blue
-IMERYS_GRAY = "#666666"  # Example Gray
+# Imerys Brand Colors (Adapt to official Imerys chart - Based on imerys.com)
+IMERYS_BLUE = "#002F6C"  # Primary Blue (Darker Blue from the Logo and Header)
+IMERYS_LIGHT_BLUE = "#4DBCE9" # Light Blue (Used in Highlights and Accents)
+IMERYS_GRAY = "#636466"  # Dark Gray (Body text, footer)
+IMERYS_WHITE = "#FFFFFF" # White (Backgrounds, Text)
 
 def generate_qr_code(text):
     """Generates a QR code image from the given text."""
