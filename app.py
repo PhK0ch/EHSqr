@@ -1,6 +1,7 @@
 import streamlit as st
 import qrcode
 from io import BytesIO
+from PIL import Image
 
 def generate_qr_code(text):
   """Generates a QR code image from the given text."""
@@ -30,7 +31,7 @@ def main():
 
     # Add a download button
     img_buffer = BytesIO()
-    qr_image.save(img_buffer, format="PNG")
+    qr_image.save(img_buffer, format="PNG")  # Save the PIL image to the buffer
     img_bytes = img_buffer.getvalue()
 
     st.download_button(
