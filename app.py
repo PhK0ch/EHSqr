@@ -102,7 +102,7 @@ def main():
         img_bytes = img_buffer.getvalue()
 
         # Display the QR code using bytes data
-        st.image(img_bytes, caption="Generated QR Code", use_column_width=True)
+        st.image(img_bytes, caption="Generated QR Code", use_container_width =True)
 
         # Add a download button
         img_buffer_download = BytesIO()  # Use a separate buffer for the download to avoid conflicts
