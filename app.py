@@ -9,6 +9,7 @@ IMERYS_LIGHT_BLUE = "#4DBCE9" # Light Blue (Used in Highlights and Accents)
 IMERYS_GRAY = "#636466"  # Dark Gray (Body text, footer)
 IMERYS_WHITE = "#FFFFFF" # White (Backgrounds, Text)
 
+
 def generate_qr_code(text):
     """Generates a QR code image from the given text."""
     qr = qrcode.QRCode(
@@ -19,7 +20,7 @@ def generate_qr_code(text):
     )
     qr.add_data(text)
     qr.make(fit=True)
-    img = qr.make_image(fill_color="black", back_color="white")  # Can customize colors here, too.
+    img = qr.make_image(fill_color="black", back_color="white")
     return img
 
 def main():
@@ -38,23 +39,36 @@ def main():
         f"""
         <style>
         .stApp {{
-            background-color: #F0F2F6; /* Light background */
+            background-color: {IMERYS_WHITE}; /* White background for maximum readability */
+            color: {IMERYS_GRAY}; /* Default text color is dark gray for good contrast */
         }}
         .stTextInput > label {{
-            color: {IMERYS_BLUE};
+            color: {IMERYS_BLUE}; /* Input label is Imerys Blue */
         }}
+        .stTextInput > div > input {{
+            border: 2px solid {IMERYS_LIGHT_BLUE}; /* Input border is light blue */
+            border-radius: 0.25rem;
+            padding: 0.5rem;
+            color: {IMERYS_GRAY}; /* Input text is dark gray */
+        }}
+
         .stDownloadButton > button {{
-            background-color: {IMERYS_BLUE};
-            color: white;
+            background-color: {IMERYS_BLUE}; /* Button background is Imerys Blue */
+            color: {IMERYS_WHITE}; /* Button text is white for maximum contrast */
             border: none;
             border-radius: 0.25rem;
             padding: 0.5rem 1rem;
+            font-weight: bold; /* Make the button text bolder */
         }}
         .stDownloadButton > button:hover {{
-            background-color: {IMERYS_LIGHT_BLUE};
+            background-color: {IMERYS_LIGHT_BLUE}; /* Hover state uses light blue */
+            color: {IMERYS_WHITE};
         }}
         h1 {{
-            color: {IMERYS_BLUE};
+            color: {IMERYS_BLUE}; /* Main heading is Imerys Blue */
+        }}
+        h2, h3, h4, h5, h6 {{
+            color: {IMERYS_BLUE}; /* Subheadings are also Imerys Blue */
         }}
         </style>
         """,
