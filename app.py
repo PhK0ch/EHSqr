@@ -1,6 +1,7 @@
 import streamlit as st
 import qrcode
 from io import BytesIO
+from PIL import Image
 
 def generate_qr_code(text):
   """Generates a QR code image from the given text."""
