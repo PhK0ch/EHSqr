@@ -1,4 +1,4 @@
-import streamlit as st
+timport streamlit as st
 import qrcode
 from io import BytesIO
 from PIL import Image
