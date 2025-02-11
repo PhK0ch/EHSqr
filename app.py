@@ -156,8 +156,27 @@ def main():
        text = st.text_input("Entrez le texte ou l'URL:", "https://www.imerys.com")
 
        if text:
-           # --- QR Code Generation logic (place your code here if needed) ---
-           st.write("Code QR généré") # Placeholder
+          qr_image = generate_qr_code(text)
+
+           # Convert PIL Image to bytes for display
+           img_buffer = BytesIO()
+           qr_image.save(img_buffer, format="PNG")
+           img_bytes = img_buffer.getvalue()
+
+           # Display the QR code using bytes data
+           st.image(img_bytes, caption="Code QR généré", use_column_width=True)
+
+           # Add a download button
+           img_buffer_download = BytesIO()  # Use a separate buffer for the download to avoid conflicts
+           qr_image.save(img_buffer_download, format="PNG")
+           img_bytes_download = img_buffer_download.getvalue()
+
+           st.download_button(
+               label="Télécharger le code QR",
+               data=img_bytes_download,
+               file_name="qr_code.png",
+               mime="image/png",
+           )
 
     elif page == "Induction de sécurité":
         st.header("Induction de sécurité - Site de Lixhe")
