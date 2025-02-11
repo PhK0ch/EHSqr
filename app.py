@@ -1,11 +1,13 @@
 import streamlit as st
 from PIL import Image
 
-# Imerys Brand Colors (Based on imerys.com)
-IMERYS_BLUE = "#002F6C"
+# Imerys Brand Colors (Based on imerys.com, accessibility-adjusted)
+IMERYS_BLUE = "#002F6C"  # Primary Blue
 IMERYS_LIGHT_BLUE = "#4DBCE9"
-IMERYS_GRAY = "#636466"
+IMERYS_GRAY = "#4A4A4A"  # Darker Gray for better contrast
 IMERYS_WHITE = "#FFFFFF"
+IMERYS_OFF_WHITE = "#F9F9F9"  # Softer background alternative
+
 
 def main():
     """Streamlit app with Imerys branding and French localization."""
@@ -13,7 +15,7 @@ def main():
     # --- Page Configuration ---
     st.set_page_config(
         page_title="Bienvenue - Ressources EHS Imerys",
-        page_icon=":safety_vest:", # Or an Imerys logo favicon
+        page_icon=":safety_vest:",  # Or an Imerys logo favicon
         layout="wide",
         initial_sidebar_state="expanded",
     )
@@ -22,35 +24,13 @@ def main():
     st.markdown(
         f"""
         <style>
+        /* General app background and text */
         .stApp {{
-            background-color: {IMERYS_WHITE};
-            color: {IMERYS_GRAY};
+            background-color: {IMERYS_OFF_WHITE}; /* Very light off-white for softer background */
+            color: {IMERYS_GRAY}; /* Darker gray for improved text readability */
         }}
-        .stTextInput > label {{
-            color: {IMERYS_BLUE};
-        }}
-        .stTextInput > div > input {{
-            border: 2px solid {IMERYS_LIGHT_BLUE};
-            border-radius: 0.25rem;
-            padding: 0.5rem;
-            color: {IMERYS_GRAY};
-        }}
-        .stDownloadButton > button {{
-            background-color: {IMERYS_BLUE};
-            color: {IMERYS_WHITE};
-            border: none;
-            border-radius: 0.25rem;
-            padding: 0.5rem 1rem;
-            font-weight: bold;
-        }}
-        .stDownloadButton > button:hover {{
-            background-color: {IMERYS_LIGHT_BLUE};
-            color: {IMERYS_WHITE};
-        }}
-        h1, h2, h3, h4, h5, h6 {{
-            color: {IMERYS_BLUE};
-        }}
-         /* Style the sidebar */
+
+        /* Sidebar background and text */
         [data-testid="stSidebar"] {{
             background-color: {IMERYS_WHITE};
             color: {IMERYS_GRAY};
@@ -65,6 +45,47 @@ def main():
         }}
 
         [data-testid="stSidebar"] a:hover {{
+            color: {IMERYS_BLUE};
+        }}
+
+        /* Input elements */
+        .stTextInput > label {{
+            color: {IMERYS_BLUE};
+        }}
+        .stTextInput > div > input {{
+            border: 2px solid {IMERYS_LIGHT_BLUE};
+            border-radius: 0.25rem;
+            padding: 0.5rem;
+            color: {IMERYS_GRAY};
+            background-color: {IMERYS_WHITE}; /* Explicitly set input background */
+        }}
+        .stNumberInput > label {{
+            color: {IMERYS_BLUE};
+        }}
+       .stNumberInput > div > input {{
+            border: 2px solid {IMERYS_LIGHT_BLUE};
+            border-radius: 0.25rem;
+            padding: 0.5rem;
+            color: {IMERYS_GRAY};
+            background-color: {IMERYS_WHITE}; /* Explicitly set input background */
+        }}
+
+        /* Button elements */
+        .stDownloadButton > button {{
+            background-color: {IMERYS_BLUE};
+            color: {IMERYS_WHITE};
+            border: none;
+            border-radius: 0.25rem;
+            padding: 0.5rem 1rem;
+            font-weight: bold;
+        }}
+        .stDownloadButton > button:hover {{
+            background-color: {IMERYS_LIGHT_BLUE};
+            color: {IMERYS_WHITE};
+        }}
+
+        /* Header elements */
+        h1, h2, h3, h4, h5, h6 {{
             color: {IMERYS_BLUE};
         }}
         </style>
@@ -92,19 +113,19 @@ def main():
         with col1:
             try:
                 imerys_logo = Image.open("imerys_logo.png")
-                st.image(imerys_logo, width=150) # Increased logo size slightly
+                st.image(imerys_logo, width=150)  # Increased logo size slightly
             except FileNotFoundError:
                 st.warning("Logo Imerys non trouvé. Placez 'imerys_logo.png' dans le même répertoire.")
 
         with col2:
             st.title("Bienvenue sur les ressources EHS Imerys - Site de Lixhe")
             st.markdown(
-            f"<p style='color:{IMERYS_GRAY};'>Votre portail pour les informations essentielles en matière de santé et de sécurité.</p>",
-            unsafe_allow_html=True, # Allows setting text color with HTML
+                f"<p style='color:{IMERYS_GRAY};'>Votre portail pour les informations essentielles en matière de santé et de sécurité.</p>",
+                unsafe_allow_html=True,  # Allows setting text color with HTML
             )
             st.markdown(
-            f"<p style='color:{IMERYS_GRAY};'>Veuillez sélectionner une option dans le menu de navigation à gauche.</p>",
-            unsafe_allow_html=True
+                f"<p style='color:{IMERYS_GRAY};'>Veuillez sélectionner une option dans le menu de navigation à gauche.</p>",
+                unsafe_allow_html=True,
             )
 
         # Add a relevant image, perhaps of the Lixhe site:
