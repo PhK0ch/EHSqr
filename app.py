@@ -1,4 +1,4 @@
-timport streamlit as st
+import streamlit as st
 import qrcode
 from io import BytesIO
 from PIL import Image
@@ -28,10 +28,10 @@ def main():
 
     # --- Page Configuration ---
     st.set_page_config(
-        page_title="Imerys EHS QR Code Generator",
-        page_icon=":barcode:",  # Use a barcode icon or Imerys logo
-        layout="centered",
-        initial_sidebar_state="collapsed",  # Optionally collapse the sidebar
+        page_title="Imerys EHS Resources",
+        page_icon=":safety_vest:",  # Use a relevant safety icon
+        layout="wide", # Use wide layout to utilize screen space
+        initial_sidebar_state="expanded", # Keep sidebar open
     )
 
     # --- Theme Customization ---
@@ -64,57 +64,70 @@ def main():
             background-color: {IMERYS_LIGHT_BLUE}; /* Hover state uses light blue */
             color: {IMERYS_WHITE};
         }}
-        h1 {{
-            color: {IMERYS_BLUE}; /* Main heading is Imerys Blue */
-        }}
-        h2, h3, h4, h5, h6 {{
-            color: {IMERYS_BLUE}; /* Subheadings are also Imerys Blue */
+        h1, h2, h3, h4, h5, h6 {{
+            color: {IMERYS_BLUE}; /* Headings are Imerys Blue */
         }}
         </style>
         """,
         unsafe_allow_html=True,
     )
 
+    # --- Sidebar Navigation ---
+    st.sidebar.header("Navigation")
+    page = st.sidebar.radio("Choose a page:", ["QR Code Generator", "Safety Induction", "Work Permit Generator"])
 
-    # --- Header and Logo ---
-    col1, col2 = st.columns([1, 3])  # Adjust column widths as needed
-    with col1:
-        # Replace "imerys_logo.png" with the actual path to the Imerys logo
-        try:
-            imerys_logo = Image.open("imerys_logo.png")
-            st.image(imerys_logo, width=100) # Adjust width as needed
-        except FileNotFoundError:
-            st.warning("Imerys logo not found. Place 'imerys_logo.png' in the same directory.")
-            pass # Handle the case where the logo file is missing
 
-    with col2:
-        st.title("Imerys EHS QR Code Generator")
+    # --- Page Content ---
+    if page == "QR Code Generator":
+        # --- Header and Logo ---
+        col1, col2 = st.columns([1, 3])  # Adjust column widths as needed
+        with col1:
+            # Replace "imerys_logo.png" with the actual path to the Imerys logo
+            try:
+                imerys_logo = Image.open("imerys_logo.png")
+                st.image(imerys_logo, width=100) # Adjust width as needed
+            except FileNotFoundError:
+                st.warning("Imerys logo not found. Place 'imerys_logo.png' in the same directory.")
+                pass # Handle the case where the logo file is missing
 
-    # --- App Content ---
-    text = st.text_input("Enter text or URL:", "https://www.imerys.com")
+        with col2:
+            st.title("Imerys EHS QR Code Generator")
 
-    if text:
-        qr_image = generate_qr_code(text)
+        # --- App Content ---
+        text = st.text_input("Enter text or URL:", "https://www.imerys.com")
 
-        # Convert PIL Image to bytes for display
-        img_buffer = BytesIO()
-        qr_image.save(img_buffer, format="PNG")
-        img_bytes = img_buffer.getvalue()
+        if text:
+            qr_image = generate_qr_code(text)
 
-        # Display the QR code using bytes data
-        st.image(img_bytes, caption="Generated QR Code", use_container_width =True)
+            # Convert PIL Image to bytes for display
+            img_buffer = BytesIO()
+            qr_image.save(img_buffer, format="PNG")
+            img_bytes = img_buffer.getvalue()
 
-        # Add a download button
-        img_buffer_download = BytesIO()  # Use a separate buffer for the download to avoid conflicts
-        qr_image.save(img_buffer_download, format="PNG")
-        img_bytes_download = img_buffer_download.getvalue()
+            # Display the QR code using bytes data
+            st.image(img_bytes, caption="Generated QR Code", use_column_width=True)
 
-        st.download_button(
-            label="Download QR Code",
-            data=img_bytes_download,
-            file_name="qr_code.png",
-            mime="image/png",
-        )
+            # Add a download button
+            img_buffer_download = BytesIO()  # Use a separate buffer for the download to avoid conflicts
+            qr_image.save(img_buffer_download, format="PNG")
+            img_bytes_download = img_buffer_download.getvalue()
+
+            st.download_button(
+                label="Download QR Code",
+                data=img_bytes_download,
+                file_name="qr_code.png",
+                mime="image/png",
+            )
+
+    elif page == "Safety Induction":
+        st.header("Safety Induction (Lixhe Site)")
+        st.write("This section will present a dynamic safety induction based on Imerys Lixhe guidelines.")
+        st.write("Once the PDF is provided, the code will be generated.")
+
+    elif page == "Work Permit Generator":
+        st.header("Work Permit Generator")
+        st.write("This section will allow you to generate a work permit for the Lixhe Site")
+        st.write("Code will be generated when the information of the work permit is provided.")
 
     # --- Footer ---
     st.markdown("---")  # Add a visual separator
