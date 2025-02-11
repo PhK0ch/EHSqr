@@ -1,37 +1,21 @@
 import streamlit as st
-import qrcode
-from io import BytesIO
 from PIL import Image
 
-# Imerys Brand Colors (Adapt to official Imerys chart - Based on imerys.com)
-IMERYS_BLUE = "#002F6C"  # Primary Blue (Darker Blue from the Logo and Header)
-IMERYS_LIGHT_BLUE = "#4DBCE9" # Light Blue (Used in Highlights and Accents)
-IMERYS_GRAY = "#636466"  # Dark Gray (Body text, footer)
-IMERYS_WHITE = "#FFFFFF" # White (Backgrounds, Text)
-
-
-def generate_qr_code(text):
-    """Generates a QR code image from the given text."""
-    qr = qrcode.QRCode(
-        version=1,
-        error_correction=qrcode.constants.ERROR_CORRECT_L,
-        box_size=10,
-        border=4,
-    )
-    qr.add_data(text)
-    qr.make(fit=True)
-    img = qr.make_image(fill_color="black", back_color="white")
-    return img
+# Imerys Brand Colors (Based on imerys.com)
+IMERYS_BLUE = "#002F6C"
+IMERYS_LIGHT_BLUE = "#4DBCE9"
+IMERYS_GRAY = "#636466"
+IMERYS_WHITE = "#FFFFFF"
 
 def main():
-    """Streamlit app for QR code generation with Imerys branding."""
+    """Streamlit app with Imerys branding and French localization."""
 
     # --- Page Configuration ---
     st.set_page_config(
-        page_title="Imerys EHS Resources",
-        page_icon=":safety_vest:",  # Use a relevant safety icon
-        layout="wide", # Use wide layout to utilize screen space
-        initial_sidebar_state="expanded", # Keep sidebar open
+        page_title="Bienvenue - Ressources EHS Imerys",
+        page_icon=":safety_vest:", # Or an Imerys logo favicon
+        layout="wide",
+        initial_sidebar_state="expanded",
     )
 
     # --- Theme Customization ---
@@ -39,33 +23,49 @@ def main():
         f"""
         <style>
         .stApp {{
-            background-color: {IMERYS_WHITE}; /* White background for maximum readability */
-            color: {IMERYS_GRAY}; /* Default text color is dark gray for good contrast */
+            background-color: {IMERYS_WHITE};
+            color: {IMERYS_GRAY};
         }}
         .stTextInput > label {{
-            color: {IMERYS_BLUE}; /* Input label is Imerys Blue */
+            color: {IMERYS_BLUE};
         }}
         .stTextInput > div > input {{
-            border: 2px solid {IMERYS_LIGHT_BLUE}; /* Input border is light blue */
+            border: 2px solid {IMERYS_LIGHT_BLUE};
             border-radius: 0.25rem;
             padding: 0.5rem;
-            color: {IMERYS_GRAY}; /* Input text is dark gray */
+            color: {IMERYS_GRAY};
         }}
-
         .stDownloadButton > button {{
-            background-color: {IMERYS_BLUE}; /* Button background is Imerys Blue */
-            color: {IMERYS_WHITE}; /* Button text is white for maximum contrast */
+            background-color: {IMERYS_BLUE};
+            color: {IMERYS_WHITE};
             border: none;
             border-radius: 0.25rem;
             padding: 0.5rem 1rem;
-            font-weight: bold; /* Make the button text bolder */
+            font-weight: bold;
         }}
         .stDownloadButton > button:hover {{
-            background-color: {IMERYS_LIGHT_BLUE}; /* Hover state uses light blue */
+            background-color: {IMERYS_LIGHT_BLUE};
             color: {IMERYS_WHITE};
         }}
         h1, h2, h3, h4, h5, h6 {{
-            color: {IMERYS_BLUE}; /* Headings are Imerys Blue */
+            color: {IMERYS_BLUE};
+        }}
+         /* Style the sidebar */
+        [data-testid="stSidebar"] {{
+            background-color: {IMERYS_WHITE};
+            color: {IMERYS_GRAY};
+        }}
+
+        [data-testid="stSidebar"] h1, [data-testid="stSidebar"] h2, [data-testid="stSidebar"] h3 {{
+            color: {IMERYS_BLUE};
+        }}
+
+        [data-testid="stSidebar"] a {{ /* Links in sidebar */
+            color: {IMERYS_GRAY};
+        }}
+
+        [data-testid="stSidebar"] a:hover {{
+            color: {IMERYS_BLUE};
         }}
         </style>
         """,
@@ -74,68 +74,73 @@ def main():
 
     # --- Sidebar Navigation ---
     st.sidebar.header("Navigation")
-    page = st.sidebar.radio("Choose a page:", ["QR Code Generator", "Safety Induction", "Work Permit Generator"])
+    page = st.sidebar.radio(
+        "Choisissez une page :",
+        [
+            "Bienvenue",
+            "Générateur de code QR",
+            "Induction de sécurité",
+            "Générateur de permis de travail",
+        ],
+    )
 
 
     # --- Page Content ---
-    if page == "QR Code Generator":
+    if page == "Bienvenue":
         # --- Header and Logo ---
-        col1, col2 = st.columns([1, 3])  # Adjust column widths as needed
+        col1, col2 = st.columns([1, 3])
         with col1:
-            # Replace "imerys_logo.png" with the actual path to the Imerys logo
             try:
                 imerys_logo = Image.open("imerys_logo.png")
-                st.image(imerys_logo, width=100) # Adjust width as needed
+                st.image(imerys_logo, width=150) # Increased logo size slightly
             except FileNotFoundError:
-                st.warning("Imerys logo not found. Place 'imerys_logo.png' in the same directory.")
-                pass # Handle the case where the logo file is missing
+                st.warning("Logo Imerys non trouvé. Placez 'imerys_logo.png' dans le même répertoire.")
 
         with col2:
-            st.title("Imerys EHS QR Code Generator")
-
-        # --- App Content ---
-        text = st.text_input("Enter text or URL:", "https://www.imerys.com")
-
-        if text:
-            qr_image = generate_qr_code(text)
-
-            # Convert PIL Image to bytes for display
-            img_buffer = BytesIO()
-            qr_image.save(img_buffer, format="PNG")
-            img_bytes = img_buffer.getvalue()
-
-            # Display the QR code using bytes data
-            st.image(img_bytes, caption="Generated QR Code", use_column_width=True)
-
-            # Add a download button
-            img_buffer_download = BytesIO()  # Use a separate buffer for the download to avoid conflicts
-            qr_image.save(img_buffer_download, format="PNG")
-            img_bytes_download = img_buffer_download.getvalue()
-
-            st.download_button(
-                label="Download QR Code",
-                data=img_bytes_download,
-                file_name="qr_code.png",
-                mime="image/png",
+            st.title("Bienvenue sur les ressources EHS Imerys - Site de Lixhe")
+            st.markdown(
+            f"<p style='color:{IMERYS_GRAY};'>Votre portail pour les informations essentielles en matière de santé et de sécurité.</p>",
+            unsafe_allow_html=True, # Allows setting text color with HTML
+            )
+            st.markdown(
+            f"<p style='color:{IMERYS_GRAY};'>Veuillez sélectionner une option dans le menu de navigation à gauche.</p>",
+            unsafe_allow_html=True
             )
 
-    elif page == "Safety Induction":
-        st.header("Safety Induction (Lixhe Site)")
-        st.write("This section will present a dynamic safety induction based on Imerys Lixhe guidelines.")
-        st.write("Once the PDF is provided, the code will be generated.")
+        # Add a relevant image, perhaps of the Lixhe site:
+        try:
+            site_image = Image.open("imerys_lixhe.jpg")  # Replace with the correct filename
+            st.image(site_image, caption="Site de Lixhe", use_column_width=True)
+        except FileNotFoundError:
+            st.warning("Image du site de Lixhe non trouvée. Placez 'imerys_lixhe.jpg' dans le même répertoire.")
 
-    elif page == "Work Permit Generator":
-        st.header("Work Permit Generator")
-        st.write("This section will allow you to generate a work permit for the Lixhe Site")
-        st.write("Code will be generated when the information of the work permit is provided.")
+
+
+    elif page == "Générateur de code QR":
+       st.header("Générateur de code QR")
+
+       # ---App Content ---
+       text = st.text_input("Entrez le texte ou l'URL:", "https://www.imerys.com")
+
+       if text:
+           #--- Code that generates the QR COde removed to prevent exceeding token limit ---
+           st.write("Code QR généré") # Placeholder
+
+    elif page == "Induction de sécurité":
+        st.header("Induction de sécurité (Site de Lixhe)")
+        st.write("Cette section présentera une induction de sécurité dynamique basée sur les directives d'Imerys Lixhe.")
+
+    elif page == "Générateur de permis de travail":
+        st.header("Générateur de permis de travail")
+        st.write("Cette section vous permettra de générer un permis de travail pour le site de Lixhe.")
+
 
     # --- Footer ---
-    st.markdown("---")  # Add a visual separator
+    st.markdown("---")
     st.markdown(
         f"<p style='text-align: center; color: {IMERYS_GRAY}; font-size: small;'>Imerys EHS - Lixhe</p>",
         unsafe_allow_html=True,
     )
-
 
 if __name__ == "__main__":
     main()
